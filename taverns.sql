@@ -1,6 +1,11 @@
+DROP TABLE IF EXISTS ServiceSupplies;
+DROP TABLE IF EXISTS ClassAssignments;
+DROP TABLE IF EXISTS Classes;
+DROP TABLE IF EXISTS Notes;
 DROP TABLE IF EXISTS SaleItems;
 DROP TABLE IF EXISTS Sales;
 DROP TABLE IF EXISTS Guests;
+DROP TABLE IF EXISTS GuestStatuses;
 DROP TABLE IF EXISTS Services;
 DROP TABLE IF EXISTS Statuses;
 DROP TABLE IF EXISTS Orders;
@@ -607,3 +612,126 @@ FROM Sales, Services
 WHERE Sales.saleID = 7
 AND Services.serviceID = 9;
 
+--/////////////////////////////////////////////////////
+
+DROP TABLE IF EXISTS Rats;
+
+CREATE TABLE Notes (
+	noteID INT IDENTITY PRIMARY KEY,
+	guestID INT FOREIGN KEY REFERENCES Guests(guestID),
+	noteText VARCHAR(240)
+);
+
+INSERT INTO Notes (guestID, noteText)
+VALUES (1, 'Greatest adventurer of all time.')
+
+INSERT INTO Notes (guestID, noteText)
+VALUES (1, 'Not much to look at.')
+
+INSERT INTO Notes (guestID, noteText)
+VALUES (2, 'Needs constant entertainment.')
+
+INSERT INTO Notes (guestID, noteText)
+VALUES (3, 'Likes slaying dragons.')
+
+INSERT INTO Notes (guestID, noteText)
+VALUES (4, 'Second greatest adventurer of all time. So close.')
+
+INSERT INTO Notes (guestID, noteText)
+VALUES (5, 'Likes pale ale?')
+
+-- This should fail.
+-- INSERT INTO Notes (guestID, noteText)
+-- VALUES (10, 'This guest doesn''t exist. Unbelievable.')
+
+CREATE TABLE GuestStatuses (
+	guestStatusID INT IDENTITY PRIMARY KEY,
+	statusName VARCHAR(20)
+);
+
+INSERT INTO GuestStatuses (statusName)
+VALUES ('Sick');
+
+INSERT INTO GuestStatuses (statusName)
+VALUES ('Fine');
+
+INSERT INTO GuestStatuses (statusName)
+VALUES ('Bored');
+
+INSERT INTO GuestStatuses (statusName)
+VALUES ('Hangry');
+
+INSERT INTO GuestStatuses (statusName)
+VALUES ('Drunk');
+
+ALTER TABLE Guests ADD birthday DATETIME;
+ALTER TABLE Guests ADD cakeday DATETIME;
+ALTER TABLE Guests ADD guestStatusID INT FOREIGN KEY REFERENCES GuestStatuses(guestStatusID);
+
+CREATE TABLE Classes (
+	classID INT IDENTITY PRIMARY KEY,
+	className VARCHAR(20)
+);
+
+INSERT INTO Classes (className)
+VALUES ('Mage');
+
+INSERT INTO Classes (className)
+VALUES ('Paladin');
+
+INSERT INTO Classes (className)
+VALUES ('Warrior');
+
+INSERT INTO Classes (className)
+VALUES ('Shaman');
+
+INSERT INTO Classes (className)
+VALUES ('Ranger');
+
+CREATE TABLE ClassAssignments (
+	classID INT,
+	guestID INT,
+	currentLevel INT,
+	PRIMARY KEY (classID, guestID)
+);
+
+INSERT INTO ClassAssignments (classID, guestID, currentLevel)
+VALUES (1, 1, 5);
+
+-- This should fail
+-- INSERT INTO ClassAssignments (classID, guestID, currentLevel)
+-- VALUES (1, 1, 2);
+
+INSERT INTO ClassAssignments (classID, guestID, currentLevel)
+VALUES (2, 1, 3);
+
+INSERT INTO ClassAssignments (classID, guestID, currentLevel)
+VALUES (2, 2, 34);
+
+INSERT INTO ClassAssignments (classID, guestID, currentLevel)
+VALUES (4, 3, 12);
+
+INSERT INTO ClassAssignments (classID, guestID, currentLevel)
+VALUES (3, 4, 51);
+
+INSERT INTO ClassAssignments (classID, guestID, currentLevel)
+VALUES (5, 5, 21);
+
+CREATE TABLE ServiceSupplies (
+	serviceID INT NOT NULL,
+	supplyID INT NOT NULL,
+	quantity INT
+);
+
+ALTER TABLE ServiceSupplies ADD FOREIGN KEY (serviceID) REFERENCES Services(serviceID);
+ALTER TABLE ServiceSupplies ADD FOREIGN KEY (supplyID) REFERENCES Supplies(supplyID);
+ALTER TABLE ServiceSupplies ADD CONSTRAINT PK_ServiceSupply PRIMARY KEY (serviceID, supplyID);
+
+INSERT INTO ServiceSupplies (serviceID, supplyID, quantity)
+VALUES (1, 2, 1);
+
+INSERT INTO ServiceSupplies (serviceID, supplyID, quantity)
+VALUES (8, 3, 1);
+
+INSERT INTO ServiceSupplies (serviceID, supplyID, quantity)
+VALUES (11, 2, 1);
