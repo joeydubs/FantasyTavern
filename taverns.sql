@@ -1,3 +1,6 @@
+--/////////////////////////////////////////////////////
+-- Assignment 1
+
 DROP TABLE IF EXISTS ServiceSupplies;
 DROP TABLE IF EXISTS ClassAssignments;
 DROP TABLE IF EXISTS Classes;
@@ -228,7 +231,7 @@ VALUES ('Bundle', 'Firewood');
 CREATE TABLE Inventory (
 	supplyID INT FOREIGN KEY REFERENCES Supplies(supplyID),
 	tavernID INT FOREIGN KEY REFERENCES Taverns(tavernID),
-	quantity INT,
+	quantity DECIMAL(18,3),
 	lastUpdated DATETIME,
 	lastValidated DATETIME
 );
@@ -306,7 +309,7 @@ CREATE TABLE Orders (
 	orderID INT IDENTITY(1,1) PRIMARY KEY,
 	supplyID INT FOREIGN KEY REFERENCES Supplies(supplyID),
 	tavernID INT FOREIGN KEY REFERENCES Taverns(tavernID),
-	cost DECIMAL,
+	cost DECIMAL(18,2),
 	quantity INT,
 	dateReceived DATETIME
 );
@@ -478,7 +481,7 @@ VALUES ('Geoffrey', 'Chaucer');
 
 CREATE TABLE Sales (
 	saleID INT IDENTITY(1,1) PRIMARY KEY,
-	amount DECIMAL,
+	amount DECIMAL(18,2),
 	guestID INT FOREIGN KEY REFERENCES Guests(guestID),
 	tavernID INT FOREIGN KEY REFERENCES Taverns(tavernID)
 );
@@ -613,6 +616,7 @@ WHERE Sales.saleID = 7
 AND Services.serviceID = 9;
 
 --/////////////////////////////////////////////////////
+-- Assignment 2
 
 DROP TABLE IF EXISTS Rats;
 
@@ -720,7 +724,7 @@ VALUES (5, 5, 21);
 CREATE TABLE ServiceSupplies (
 	serviceID INT NOT NULL,
 	supplyID INT NOT NULL,
-	quantity INT
+	quantity DECIMAL(18,3)
 );
 
 ALTER TABLE ServiceSupplies ADD FOREIGN KEY (serviceID) REFERENCES Services(serviceID);
@@ -728,10 +732,10 @@ ALTER TABLE ServiceSupplies ADD FOREIGN KEY (supplyID) REFERENCES Supplies(suppl
 ALTER TABLE ServiceSupplies ADD CONSTRAINT PK_ServiceSupply PRIMARY KEY (serviceID, supplyID);
 
 INSERT INTO ServiceSupplies (serviceID, supplyID, quantity)
-VALUES (1, 2, 1);
+VALUES (1, 2, 0.008);
 
 INSERT INTO ServiceSupplies (serviceID, supplyID, quantity)
-VALUES (8, 3, 1);
+VALUES (8, 3, 0.008);
 
 INSERT INTO ServiceSupplies (serviceID, supplyID, quantity)
-VALUES (11, 2, 1);
+VALUES (11, 2, 0.008);
